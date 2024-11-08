@@ -1,0 +1,70 @@
+[tool.poetry]
+name = "tech-challenge-fase4"
+version = "0.1.0"
+description = "Projeto da quarta fase do Tech Challenge - FIAP"
+authors = ["Matheus Chaves <matheusfonsecachaves@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.13"
+yfinance = "^0.2.48"
+pandas = "^2.2.3"
+seaborn = "^0.13.2"
+pre-commit = "^4.0.1"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.7.2"
+pyright = "^1.1.388"
+ipykernel = "^6.29.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+    "C",    # mccabe rules
+    "F",    # pyflakes rules
+    "E",    # pycodestyle error rules
+    "W",    # pycodestyle warning rules
+    "B",    # flake8-bugbear rules
+    "SIM",  # flake8-simplify
+    "I",    # isort rules
+    "PD",   # pandas rules
+    "NPY",  # numpy rules
+]
+
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "single"
+docstring-code-format = true
+
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+include = ["src"]
+exclude = ["**/node_modules",
+    "**/__pycache__",
+    "src/experimental",
+    "src/typestubs"
+]
+ignore = ["src/oldstuff"]
+defineConstant = { DEBUG = true }
+stubPath = "src/stubs"
+
+reportMissingImports = "error"
+reportMissingTypeStubs = false
+
+pythonVersion = "3.13"
+pythonPlatform = "Linux"
+
+executionEnvironments = [
+  { root = "src" }
+]
