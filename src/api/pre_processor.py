@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
+
 class PreProcessor:
     def __init__(self, sequence_length: int, num_features: int):
         """
@@ -17,30 +18,30 @@ class PreProcessor:
         - Normaliza os dados entre 0 e 1.
         - Adiciona padding ou corta os dados para ajustar ao tamanho esperado.
         - Ajusta para o formato [1, sequence_length, num_features].
-        
+
         :param data: Lista bidimensional com os dados de entrada.
         :return: Dados transformados prontos para o modelo.
         """
-        data = np.array(data)
+        np_data = np.array(data)
 
         # Verifica se o número de features está correto
-        if data.shape[1] != self.num_features:
+        if np_data.shape[1] != self.num_features:
             raise ValueError(
-                f"Número de features incorreto. Esperado: {self.num_features}, Recebido: {data.shape[1]}"
+                f'Número de features incorreto. Esperado: {self.num_features},\
+                Recebido: {np_data.shape[1]}'
             )
 
-        # Normaliza os dados entre 0 e 1
         scaler = MinMaxScaler()
-        data = scaler.fit_transform(data)
+        np_data = scaler.fit_transform(np_data)
 
-        # Adiciona padding se necessário
-        if data.shape[0] < self.sequence_length:
-            padding = np.zeros((self.sequence_length - data.shape[0], self.num_features))
-            data = np.vstack([padding, data])
+        if np_data.shape[0] < self.sequence_length:
+            padding = np.zeros(
+                (self.sequence_length - np_data.shape[0], self.num_features)
+            )
+            np_data = np.vstack([padding, np_data])
 
         # Corta os dados se forem maiores que sequence_length
-        if data.shape[0] > self.sequence_length:
-            data = data[-self.sequence_length :, :]
+        if np_data.shape[0] > self.sequence_length:
+            np_data = np_data[-self.sequence_length :, :]
 
-        # Ajusta para o formato [1, sequence_length, num_features]
-        return data.reshape(1, self.sequence_length, self.num_features)
+        return np_data.reshape(1, self.sequence_length, self.num_features)
