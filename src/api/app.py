@@ -20,17 +20,12 @@ def predict(input_data: StockInput, days: int = Query(1, ge=1)):
     Faz a predição com base nos dados de entrada e no número de dias fornecido.
     """
     try:
-        # Pré-processa os dados para o formato esperado pelo modelo
-        current_data = pre_processor.preprocess_input(input_data.data)
+        current_data, scaler = pre_processor.preprocess_input(input_data.data)
 
-        # Itera para prever múltiplos dias (se solicitado)
         results = []
         for _ in range(days):
             prediction = model_loader.predict(current_data)
-            results.append(prediction.tolist())
-
-            # Atualiza os dados para incluir a predição (se o modelo for autoregressivo)
-            # Exemplo: current_data = update_with_prediction(current_data, prediction)
+            results.append(scaler.inverse_transform(prediction).tolist())
 
         return {'predictions': results}
 

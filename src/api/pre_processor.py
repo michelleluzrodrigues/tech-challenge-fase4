@@ -12,7 +12,7 @@ class PreProcessor:
         self.sequence_length = sequence_length
         self.num_features = num_features
 
-    def preprocess_input(self, data: list) -> np.ndarray:
+    def preprocess_input(self, data: list) -> tuple[np.ndarray, MinMaxScaler]:
         """
         Pré-processa os dados para o formato esperado pelo modelo:
         - Normaliza os dados entre 0 e 1.
@@ -32,16 +32,6 @@ class PreProcessor:
             )
 
         scaler = MinMaxScaler()
-        np_data = scaler.fit_transform(np_data)
+        np_data = scaler.fit_transform(np_data.reshape(-1, 1))
 
-        if np_data.shape[0] < self.sequence_length:
-            padding = np.zeros(
-                (self.sequence_length - np_data.shape[0], self.num_features)
-            )
-            np_data = np.vstack([padding, np_data])
-
-        # Corta os dados se forem maiores que sequence_length
-        if np_data.shape[0] > self.sequence_length:
-            np_data = np_data[-self.sequence_length :, :]
-
-        return np_data.reshape(1, self.sequence_length, self.num_features)
+        return np_data, scaler

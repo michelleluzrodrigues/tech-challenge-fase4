@@ -1,6 +1,6 @@
 import os
 
-from keras.api.models import Model, load_model
+from keras.api.models import load_model
 
 
 class ModelLoader:
@@ -8,7 +8,7 @@ class ModelLoader:
         self.model = load_model(model_path)
 
     def predict(self, data):
-        return Model(self.model).predict(data)
+        return self.model.predict(data)  # type: ignore
 
 
 model_path = os.path.join('models', 'lstm_stock_prediction_model.h5')
